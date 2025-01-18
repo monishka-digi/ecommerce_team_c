@@ -59,7 +59,7 @@ const Categories = () => {
       <FlatList
         data={filteredCategories}
         renderItem={renderItem}
-        keyExtractor={(item) => item.name} 
+        keyExtractor={(item) => item?.name} 
         contentContainerStyle={styles.container}
         ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
       />
