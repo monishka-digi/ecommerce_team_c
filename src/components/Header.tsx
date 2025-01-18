@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 const Header = ({ navigation }) => {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>App Name</Text>
+      <Text style={styles.title}>{"DigiSprint Solutions"}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <Text style={styles.cartIcon}>🛒</Text>
       </TouchableOpacity>
