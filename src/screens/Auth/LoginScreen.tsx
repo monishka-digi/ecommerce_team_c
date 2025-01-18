@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { loggedInUser } from '../store/asyncThunks';
+import { loggedInUser } from '../../store/asyncThunks';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
