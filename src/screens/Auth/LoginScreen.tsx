@@ -1,34 +1,41 @@
-import * as React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { loggedInUser } from '../../store/asyncThunks';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
 
   const handleLogin = async () => {
+    setIsLoading(true);
+    setError('');
     try {
-        console.log("formData111", formData)
-        const response = await dispatch(loggedInUser({ ...formData, expiresInMins: 30 })).unwrap();
-        console.log('Login Successful:', response);
-        navigation.replace('Home');
-        
-      } catch (error) {
-        console.error('Login Failed:', error);
-      }
-    };
+      console.log('formData:', formData);
+      const response = await dispatch(loggedInUser({ ...formData, expiresInMins: 30 })).unwrap();
+      console.log('Login Successful:', response);
+      navigation.replace('Home');
+    } catch (err) {
+      console.error('Login Failed:', err);
+      setError(err.message || 'Login failed. Please try again.');
+      Alert.alert('Login Error', err.message || 'Something went wrong.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>{"Login"}</Text>
 
       <TextInput
         style={styles.input}
@@ -47,8 +54,18 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={(value) => handleChange('password', value)}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+      <TouchableOpacity
+        style={[styles.button, isLoading && styles.disabledButton]}
+        onPress={handleLogin}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>{"Login"}</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -90,6 +107,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  disabledButton: {
+    backgroundColor: '#9cc1f5',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 10,
   },
 });
 
