@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { useDispatch } from 'react-redux';
 import { loggedInUser } from '../store/asyncThunks';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
     username: '',
@@ -19,6 +19,7 @@ const LoginScreen = () => {
         console.log("formData111", formData)
         const response = await dispatch(loggedInUser({ ...formData, expiresInMins: 30 })).unwrap();
         console.log('Login Successful:', response);
+        navigation.replace('Home');
         
       } catch (error) {
         console.error('Login Failed:', error);
