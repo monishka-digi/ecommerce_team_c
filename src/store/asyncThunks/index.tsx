@@ -1,18 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../axios/axiosInstance";
-import axios from "axios";
 
 export const loggedInUser = createAsyncThunk(
     "auth/loggedInUser",
     async (payload, { rejectWithValue }) => {
       console.log("payload111111", payload)
       try {
-        const response = await axios.post(
+        const response = await axiosInstance.post(
           "https://dummyjson.com/auth/login",
           payload,
           { withCredentials: true }
         );
-        console.log("********", response)
+        console.log("********", response);
         // if (response?.data?.success === false) {
         //   return rejectWithValue(response?.data?.errorMessage);
         // }

@@ -1,7 +1,7 @@
 // navigation/BottomTabs.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Category from '../screens/Home/Category';
+import Category from '../screens/Home/Categories';
 import Header from '../components/Header';
 import ProductListingScreen from '../screens/PLP/ProductListingScreen';
 import Profile from '../screens/Home/Profile';
