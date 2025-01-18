@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-const PDP = () => {
+const CheckoutScreen = () => {
   return (
     <View>
-      <Text>PDP Page</Text>
+      <Text>CheckoutScreen Page</Text>
     </View>
   );
 };
 
-export default PDP;
+export default CheckoutScreen;
