@@ -4,20 +4,29 @@ import axiosInstance from "../../axios/axiosInstance";
 export const loggedInUser = createAsyncThunk(
     "auth/loggedInUser",
     async (payload, { rejectWithValue }) => {
-      console.log("payload111111", payload)
       try {
         const response = await axiosInstance.post(
           "https://dummyjson.com/auth/login",
           payload,
           { withCredentials: true }
         );
-        console.log("********", response);
-        // if (response?.data?.success === false) {
-        //   return rejectWithValue(response?.data?.errorMessage);
-        // }
+        console.log("loggedInUser", response)
         return response?.data;
       } catch (error) {
         return rejectWithValue(error.message || "An error occurred during login");
+      }
+    }
+  );
+
+  export const fetchCategories = createAsyncThunk(
+    'categories/fetchCategories',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.get('https://dummyjson.com/products/categories');
+        console.log("fetchCategories", response)
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data || 'Failed to fetch categories');
       }
     }
   );

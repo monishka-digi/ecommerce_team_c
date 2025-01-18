@@ -1,28 +1,21 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
-
-const categories = [
-  { id: 1, name: 'Electronics' },
-  { id: 2, name: 'Fashion' },
-  { id: 3, name: 'Groceries' },
-  { id: 4, name: 'Books' },
-  { id: 5, name: 'Furniture' },
-  { id: 6, name: 'Toys' },
-  { id: 7, name: 'Sports' },
-  { id: 8, name: 'Beauty' },
-];
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCategories } from '../../store/asyncThunks';
 
 const Categories = () => {
   const [searchText, setSearchText] = useState('');
-  const [filteredCategories, setFilteredCategories] = useState(categories);
+  const dispatch = useDispatch();
 
-  const handleSearch = (text) => {
-    setSearchText(text);
-    const filteredData = categories.filter((item) =>
-      item.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredCategories(filteredData);
-  };
+  const { categories, loading, error } = useSelector((state) => state?.categories);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  const filteredCategories = categories.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const handleCategoryClick = (categoryName) => {
     Alert.alert('Category Selected', `You clicked on ${categoryName}`);
@@ -40,6 +33,18 @@ const Categories = () => {
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return <ActivityIndicator size="large" color="#00796b" style={styles.loader} />;
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{"Error: "}{error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.mainContainer}>
       {/* Search Input Field */}
@@ -47,18 +52,16 @@ const Categories = () => {
         style={styles.searchInput}
         placeholder="Search categories..."
         value={searchText}
-        onChangeText={handleSearch}
+        onChangeText={setSearchText}
       />
 
       {/* Grid View */}
       <FlatList
         data={filteredCategories}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.name} 
         contentContainerStyle={styles.container}
-        ListEmptyComponent={
-          <Text style={styles.noResults}>{"No categories found."}</Text>
-        }
+        ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
       />
     </View>
   );
@@ -110,6 +113,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     marginTop: 20,
+  },
+  loader: {
+    marginTop: 20,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
   },
 });
 
