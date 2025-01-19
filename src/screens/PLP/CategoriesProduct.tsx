@@ -2,10 +2,11 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 const CategoriesProduct = ({ route }) => {
-  const { name } = route?.params; 
+  const {categoryName} = route?.params; 
+ console.log("categoryName11111111", categoryName)
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{"Category: "}{name}</Text>
+      <Text style={styles.header}>{"Category: "}{categoryName}</Text>
     </View>
   );
 };

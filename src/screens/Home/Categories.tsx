@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Activity
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCategories } from '../../store/asyncThunks';
 
-const Categories = () => {
+const Categories = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
 
@@ -18,7 +18,8 @@ const Categories = () => {
   );
 
   const handleCategoryClick = (categoryName) => {
-    Alert.alert('Category Selected', `You clicked on ${categoryName}`);
+    navigation.navigate('CategoriesProducts', { categoryName });
+    // Alert.alert('Category Selected', `You clicked on ${categoryName}`);
   };
 
   const renderItem = ({ item, index }) => (
@@ -27,7 +28,7 @@ const Categories = () => {
         styles.categoryContainer,
         index % 2 === 0 ? styles.alignLeft : styles.alignRight,
       ]}
-      onPress={() => handleCategoryClick(item.name)}
+      onPress={() => handleCategoryClick(item.slug)}
     >
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
