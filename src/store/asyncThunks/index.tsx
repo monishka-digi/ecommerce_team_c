@@ -10,7 +10,6 @@ export const loggedInUser = createAsyncThunk(
           payload,
           { withCredentials: true }
         );
-        console.log("loggedInUser", response)
         return response?.data;
       } catch (error) {
         return rejectWithValue(error.message || "An error occurred during login");
@@ -23,7 +22,6 @@ export const loggedInUser = createAsyncThunk(
     async (_, { rejectWithValue }) => {
       try {
         const response = await axiosInstance.get('https://dummyjson.com/products/categories');
-        console.log("fetchCategories", response)
         return response.data;
       } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to fetch categories');
@@ -36,10 +34,22 @@ export const loggedInUser = createAsyncThunk(
     async (_, { rejectWithValue }) => {
       try {
       const response = await axiosInstance.get('https://dummyjson.com/products');
-      console.log("fetchProducts", response)
       return response.data;
       } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to fetch products');
       }
     }
   );
+
+  export const fetchCaterotyProducts = createAsyncThunk(
+    'products/fetchCaterotyProducts',
+    async (categoryName, { rejectWithValue }) => {
+      try {
+      const response = await axiosInstance.get(`https://dummyjson.com/products/category/${categoryName}`);
+      return response.data;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data || 'Failed to fetch category products');
+      }
+    }
+  );
+
