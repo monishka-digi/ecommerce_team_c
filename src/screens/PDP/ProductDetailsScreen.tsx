@@ -1,27 +1,22 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-// import Carousel from 'react-native-snap-carousel'; 
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 
 const ProductDetailsScreen = ({ route }) => {
   const { product } = route.params;
-  console.log('Product:', product);
-
-  const renderCarouselItem = ({ item }) => (
-    <Image source={{ uri: item }} style={styles.carouselImage} />
-  );
+  const { width } = Dimensions.get('window');
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Carousel for product images */}
-      <View style={styles.carouselContainer}>
-        {/* <Carousel
-          data={product.images}
-          renderItem={renderCarouselItem}
-          sliderWidth={300}
-          itemWidth={250}
-          loop
-        /> */}
-      </View>
+      <FlatList
+        data={product.images}
+        horizontal
+        pagingEnabled
+        renderItem={({ item }) => (
+          <Image source={{ uri: item }} style={[styles.carouselImage, { width }]} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+      />
 
       {/* Product Details */}
       <Text style={styles.title}>{product.title}</Text>
@@ -30,9 +25,6 @@ const ProductDetailsScreen = ({ route }) => {
 
       {/* Additional Details */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{"Brand: "}</Text> {product.brand}
-        </Text>
         <Text style={styles.detailItem}>
           <Text style={styles.detailLabel}>{"Rating: "}</Text> {product.rating}
         </Text>
