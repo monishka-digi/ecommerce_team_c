@@ -23,7 +23,7 @@ const CategoriesProduct = ({route, navigation}) => {
     dispatch(fetchCaterotyProducts(categoryName));
   }, [dispatch]);
 
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products?.filter(product =>
     product?.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
