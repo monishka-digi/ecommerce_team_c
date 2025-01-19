@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCartAPI } from '../../store/asyncThunks';
 
 const ProductDetailsScreen = ({ route }) => {
+  const {user} = useSelector((state) => state?.user);
   const { product } = route.params;
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
@@ -14,10 +16,17 @@ const ProductDetailsScreen = ({ route }) => {
     }
   };
 
-  const handleAddToCart = () => {
-    console.log("qqqqqqqq", count);
-    // dispatch(updateCart({ product, quantity: count }));
+
+const handleAddToCart = (selectedProducts) => {
+  const payload = {
+    userId: user?.id,
+    products: [{
+      id: selectedProducts?.id,
+      quantity: count,
+    }],
   };
+  dispatch(addToCartAPI(payload)).unwrap();
+};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -65,7 +74,7 @@ const ProductDetailsScreen = ({ route }) => {
       </View>
 
       {/* Add to Cart Button */}
-      <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
+      <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(product)}>
         <Text style={styles.addToCartText}>{"Add to Cart"}</Text>
       </TouchableOpacity>
     </ScrollView>
