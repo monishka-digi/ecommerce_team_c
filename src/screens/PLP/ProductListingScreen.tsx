@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../store/asyncThunks';
 
-const ProductListingScreen = () => {
+const ProductListingScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state?.products);
   const { products} = useSelector((state) => state?.products?.products);
@@ -32,12 +32,15 @@ const ProductListingScreen = () => {
   : [];
 
   const renderItem = ({ item }) => (
-    <View style={styles.productCard}>
+    <TouchableOpacity
+      style={styles.productCard}
+      onPress={() => navigation.navigate('PDP', { product: item })}
+      >
       <Image source={{ uri: item?.thumbnail }} style={styles.thumbnail} />
       <Text style={styles.productTitle}>{item?.title}</Text>
-      <Text style={styles.productPrice}>{item?.price}</Text>
+      <Text style={styles.productPrice}>{"Price: "}{item?.price}</Text>
       <Text style={styles.productDescription}>{item?.description}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
