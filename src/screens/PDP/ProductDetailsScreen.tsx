@@ -4,18 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCartAPI } from '../../store/asyncThunks';
 
 const ProductDetailsScreen = ({ route }) => {
-  const {user} = useSelector((state) => state?.user);
-  const { product } = route.params;
   const dispatch = useDispatch();
+  const { product } = route.params;
+  const {user} = useSelector((state) => state?.user);
+  const {cartItems} = useSelector((state) => state?.cart);
   const { width } = Dimensions.get('window');
   const [count, setCount] = useState(1);
+  const isInCart = cartItems?.some((item) => item?.id === product.id);
 
   const handleDecrement = () => {
     if (count > 1) {
       setCount(prevCount => prevCount - 1);
     }
   };
-
 
 const handleAddToCart = (selectedProducts) => {
   const payload = {
@@ -26,6 +27,15 @@ const handleAddToCart = (selectedProducts) => {
     }],
   };
   dispatch(addToCartAPI(payload)).unwrap();
+};
+
+const handleRemoveFromCart = (selectedProducts) => {
+  console.log("99Remove", selectedProducts)
+  const payload = {
+    userId: user?.id,
+    productId: selectedProducts?.id,
+  };
+  // dispatch(removeFromCartAPI(payload)).unwrap();
 };
 
   return (
@@ -73,10 +83,15 @@ const handleAddToCart = (selectedProducts) => {
         </TouchableOpacity>
       </View>
 
-      {/* Add to Cart Button */}
-      <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(product)}>
-        <Text style={styles.addToCartText}>{"Add to Cart"}</Text>
-      </TouchableOpacity>
+      {isInCart ? (
+        <TouchableOpacity style={styles.removeFromCartButton} onPress={() => handleRemoveFromCart(product)}>
+          <Text style={styles.removeFromCartText}>{"Remove from Cart"}</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(product)}>
+          <Text style={styles.addToCartText}>{"Add to Cart"}</Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 };
@@ -128,6 +143,18 @@ const styles = StyleSheet.create({
   },
   addToCartButton: {
     backgroundColor: '#007BFF',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  removeFromCartText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  removeFromCartButton: {
+    backgroundColor: '#FF0000',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
