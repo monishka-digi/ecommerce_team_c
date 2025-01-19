@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cartIcon: {
-    fontSize: 24,
+    fontSize: 25,
   },
 });
 
