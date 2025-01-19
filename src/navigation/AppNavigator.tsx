@@ -9,6 +9,7 @@ import CheckoutScreen from '../screens/Cart/CheckoutScreen';
 import CategoriesProduct from '../screens/PLP/CategoriesProduct';
 import {Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
+import AddressesScreen from '../screens/Addresses/AddressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,8 +54,10 @@ const AppNavigator = () => {
       />
 
       <Stack.Screen name="PLP" component={ProductListingScreen} />
-      <Stack.Screen name="Cart" component={CartScreen} />
+      <Stack.Screen name="Cart" component={CartScreen} options={{title: 'Cart', headerShown: true }}/>
       <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      <Stack.Screen name="Addresses" component={AddressesScreen} options={{title: 'Address Details', headerShown: true }} />
+      
     </Stack.Navigator>
   );
 };
