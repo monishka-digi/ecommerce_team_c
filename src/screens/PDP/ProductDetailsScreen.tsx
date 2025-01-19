@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 const ProductDetailsScreen = ({ route }) => {
   const { product } = route.params;
+  const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
+  const [count, setCount] = useState(1);
+
+  const handleDecrement = () => {
+    if (count > 1) {
+      setCount(prevCount => prevCount - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    console.log("qqqqqqqq", count);
+    // dispatch(updateCart({ product, quantity: count }));
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -39,8 +53,19 @@ const ProductDetailsScreen = ({ route }) => {
         </Text>
       </View>
 
+       {/* Quantity Selector */}
+       <View style={styles.quantityContainer}>
+        <TouchableOpacity style={styles.quantityButton} onPress={handleDecrement}>
+          <Text style={styles.quantityButtonText}>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.quantityText}>{count}</Text>
+        <TouchableOpacity style={styles.quantityButton} onPress={() => setCount(prevCount => prevCount + 1)}>
+          <Text style={styles.quantityButtonText}>+</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Add to Cart Button */}
-      <TouchableOpacity style={styles.addToCartButton}>
+      <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
         <Text style={styles.addToCartText}>{"Add to Cart"}</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -102,6 +127,27 @@ const styles = StyleSheet.create({
   addToCartText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  quantityButton: {
+    backgroundColor: '#007BFF',
+    padding: 8,
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
+  quantityButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  quantityText: {
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });
