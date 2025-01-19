@@ -53,3 +53,15 @@ export const loggedInUser = createAsyncThunk(
     }
   );
 
+  export const addToCartAPI = createAsyncThunk(
+  'cart/addToCartAPI',
+  async ( payload , { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('https://dummyjson.com/carts/add', payload);
+      return response?.data;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data || 'Failed to add products in cart');
+    }
+  }
+);
+
