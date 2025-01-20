@@ -4,12 +4,12 @@ import BottomTabs from './BottomTabs';
 import LoginScreen from '../screens/Auth/LoginScreen';
 import ProductDetailsScreen from '../screens/PDP/ProductDetailsScreen';
 import ProductListingScreen from '../screens/PLP/ProductListingScreen';
-import CartScreen from '../screens/Cart/CartScreen';
-import CheckoutScreen from '../screens/Cart/CheckoutScreen';
+import CartScreen from '../screens/Cart/CheckoutScreen';
 import CategoriesProduct from '../screens/PLP/CategoriesProduct';
 import {Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddressesScreen from '../screens/Addresses/AddressScreen';
+import ConformationScreen from '../screens/OrderConformation/ConformationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,9 +54,10 @@ const AppNavigator = () => {
       />
 
       <Stack.Screen name="PLP" component={ProductListingScreen} />
-      <Stack.Screen name="Cart" component={CartScreen} options={{title: 'Cart', headerShown: true }}/>
-      <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      <Stack.Screen name="Checkout" component={CartScreen} options={{title: 'Checkout', headerShown: true }}/>
       <Stack.Screen name="Addresses" component={AddressesScreen} options={{title: 'Address Details', headerShown: true }} />
+      <Stack.Screen name="OrderConformation" component={ConformationScreen} options={{title: 'Order Conformation', headerShown: true }}/>
+
       
     </Stack.Navigator>
   );
