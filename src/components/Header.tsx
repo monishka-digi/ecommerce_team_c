@@ -8,7 +8,7 @@ const Header = ({ navigation }) => {
   return (
     <View style={styles.header}>
       <Text style={styles.title}>{"DigiSprint Solutions"}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
         <Text style={styles.cartIcon}>🛒{cartItems?.length}</Text>
       </TouchableOpacity>
     </View>
