@@ -9,7 +9,7 @@ import CategoriesProduct from '../screens/PLP/CategoriesProduct';
 import {Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddressesScreen from '../screens/Addresses/AddressScreen';
-import ConformationScreen from '../screens/OrderConformation/ConformationScreen';
+import ConformationScreen from '../screens/OrderConformation/ConfirmationScreen';
 
 const Stack = createNativeStackNavigator();
 
