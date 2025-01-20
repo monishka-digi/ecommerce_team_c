@@ -56,7 +56,7 @@ const AppNavigator = () => {
       <Stack.Screen name="PLP" component={ProductListingScreen} />
       <Stack.Screen name="Checkout" component={CartScreen} options={{title: 'Checkout', headerShown: true }}/>
       <Stack.Screen name="Addresses" component={AddressesScreen} options={{title: 'Address Details', headerShown: true }} />
-      <Stack.Screen name="OrderConformation" component={ConformationScreen} options={{title: 'Order Conformation', headerShown: true }}/>
+      <Stack.Screen name="OrderConformation" component={ConformationScreen} />
 
       
     </Stack.Navigator>
