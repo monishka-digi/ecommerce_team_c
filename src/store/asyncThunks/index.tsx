@@ -65,3 +65,17 @@ export const loggedInUser = createAsyncThunk(
   }
 );
 
+export const searchProducts = createAsyncThunk(
+  'products/searchProducts',
+  async (query, { rejectWithValue }) => {
+    console.log("asyncccccccccc", query)
+    try {
+    const response = await axiosInstance.get(`https://dummyjson.com/products/search?q=${query}`);
+    console.log("resssssssssssssssssss", response.data);
+    return response?.data; 
+  } catch (error) {
+    return rejectWithValue(error?.response?._data || 'Failed to search products');
+}
+  }
+);
+
