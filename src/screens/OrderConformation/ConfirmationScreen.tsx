@@ -1,13 +1,20 @@
 import React from 'react';
 import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetCart } from '../../store/slices/cartSlice';
 
 const ConfirmationScreen = ({navigation}) => {
   const {cartItems} = useSelector((state) => state?.cart);
-
+  const dispatch = useDispatch();
+  
   const calculateTotal = () => {
     return cartItems?.reduce((total, item) => total + item.quantity * item.price, 0)?.toFixed(2);
   };
+
+  const handleClearCart = () => {
+    dispatch(resetCart());
+    navigation.navigate("Home")
+  }
 
   return (
     <View style={styles.container}>
@@ -34,7 +41,7 @@ const ConfirmationScreen = ({navigation}) => {
 
       <Text style={styles.thankYouText}>{"Thank you for your purchase!"}</Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity style={styles.button} onPress={handleClearCart}>
         <Text style={styles.buttonText}>{"Back to Home"}</Text>
       </TouchableOpacity>
     </View>
