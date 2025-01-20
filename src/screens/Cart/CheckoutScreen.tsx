@@ -6,7 +6,10 @@ const CartScreen = ({navigation}) => {
   const {cartItems} = useSelector(state => state?.cart);
 
   const renderItem = ({ item }) => (
-    <View style={styles.cartItem}>
+    <TouchableOpacity 
+    style={styles.cartItem}
+    onPress={() => navigation.navigate('PDP', {product: item})}
+    >
       <Image source={{ uri: item.thumbnail }} style={styles.image} />
       <View style={styles.itemDetails}>
         <Text style={styles.title}>{item.title}</Text>
@@ -14,7 +17,7 @@ const CartScreen = ({navigation}) => {
         <Text style={styles.quantity}>{"Quantity: "} {item.quantity}</Text>
         <Text style={styles.total}>{'Total: '} {item.total.toFixed(2)}</Text>
       </View>
-    </View>
+      </TouchableOpacity>
   );
 
   return (
