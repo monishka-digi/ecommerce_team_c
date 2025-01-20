@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, StyleSheet, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../../store/asyncThunks';
+import { fetchProducts, searchProducts } from '../../store/asyncThunks';
 
 const ProductListingScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state?.products);
-  const { products} = useSelector((state) => state?.products?.products);
+  const { products } = useSelector((state) => state?.products?.products);
   const [searchQuery, setSearchQuery] = useState('');
+  const [query, setquery] = useState('');
 
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setquery(searchQuery);
+      }, 300);
+      return () => clearTimeout(handler);
+    }, [searchQuery]);
 
-  if (loading) {
+    useEffect(() => {
+      if (query?.length >= 3) {
+        dispatch(searchProducts(query)); 
+      } else if (query.length === 0) {
+        dispatch(fetchProducts()); 
+      }
+    }, [query, dispatch]);
+
+    if (loading) {
       return <ActivityIndicator size="large" color="#00796b" style={styles.loader} />;
     }
   
@@ -25,11 +37,6 @@ const ProductListingScreen = ({navigation}) => {
       );
     }
 
-  const filteredProducts = Array.isArray(products)
-  ? products.filter((product) =>
-      product?.title.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  : [];
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -45,7 +52,6 @@ const ProductListingScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {/* Search Input Field */}
       <TextInput
         style={styles.searchInput}
         placeholder="Search products"
@@ -53,12 +59,12 @@ const ProductListingScreen = ({navigation}) => {
         onChangeText={setSearchQuery}
       />
 
-      {/* Product List with FlatList */}
       <FlatList
-        data={filteredProducts}
+        data={products}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()} 
         numColumns={2} 
+        ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
       />
     </View>
   );
@@ -122,6 +128,12 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 16,
+  },
+  noResults: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+    marginTop: 20,
   },
 });
 
