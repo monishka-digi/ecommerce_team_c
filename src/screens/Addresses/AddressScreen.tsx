@@ -117,7 +117,7 @@ const AddressesScreen = ({navigation}) => {
         onPress={() => navigation.navigate('OrderConformation')}
         style={styles.submitButton}
       >
-        <Text style={styles.submitText}>{"Submit Addresses"}</Text>
+        <Text style={styles.submitText}>{"Place Order"}</Text>
       </TouchableOpacity>
     </View>
   );

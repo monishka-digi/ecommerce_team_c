@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetCart } from '../../store/slices/cartSlice';
 
 const ConfirmationScreen = ({navigation}) => {
-  const {cartItems} = useSelector((state) => state?.cart);
   const dispatch = useDispatch();
+  const {cartItems} = useSelector((state) => state?.cart);
+  const { addresses, selectedAddressIndex } = useSelector((state) => state?.addresses);
+  const selectedAddress = addresses[selectedAddressIndex] || {};
   
   const calculateTotal = () => {
     return cartItems?.reduce((total, item) => total + item.quantity * item.price, 0)?.toFixed(2);
@@ -19,6 +21,16 @@ const ConfirmationScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{"Order Confirmation"}</Text>
+
+      <View style={styles.addressContainer}>
+        <Text style={styles.addressHeader}>{"Delivery Address"}</Text>
+        <Text style={styles.addressText}>{selectedAddress?.addressLine}</Text>
+        <Text style={styles.addressText}>
+          {selectedAddress?.city}, {selectedAddress?.state} - {selectedAddress?.pincode}
+        </Text>
+      </View>
+
+      <Text style={styles.orderItemsHeader}>{"Place Order Items"}</Text>
 
       <FlatList
         data={cartItems}
@@ -74,6 +86,28 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
+  addressContainer: {
+    padding: 15,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  addressHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+  },
+  addressText: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 4,
+  },
   itemImage: {
     width: 50,
     height: 50,
@@ -128,6 +162,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  orderItemsHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#333',
   },
 });
 
