@@ -8,7 +8,6 @@ export const loggedInUser = createAsyncThunk(
         const response = await axiosInstance.post(
           "https://dummyjson.com/auth/login",
           payload,
-          { withCredentials: true }
         );
         return response?.data;
       } catch (error) {

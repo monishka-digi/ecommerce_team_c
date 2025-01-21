@@ -23,34 +23,40 @@ const AppNavigator = () => {
       <Stack.Screen
         name="PDP"
         component={ProductDetailsScreen}
-        options={{
+        options={({ navigation }) => ({
           title: 'Product Details',
           headerShown: true,
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => console.log('Icon pressed!')}
+              onPress={() => navigation.navigate('Checkout', {product: cartItems})}
               style={{marginRight: 15}}>
               <Text style={{fontSize: 25}}>
                 {'🛒'}
                 {cartItems?.length}
               </Text>
             </TouchableOpacity>
-          ),
-        }}
+          )
+        })
+        }
       />
       <Stack.Screen
         name="CategoriesProducts"
         component={CategoriesProduct}
-        options={{title: 'Categories Product Details', headerShown: true, headerRight: () => (
-          <TouchableOpacity
-            onPress={() => console.log('Icon pressed!')}
-            style={{marginRight: 15}}>
-            <Text style={{fontSize: 25}}>
-              {'🛒'}
-              {cartItems?.length}
-            </Text>
-          </TouchableOpacity>
-        ),}}
+        options={({ navigation }) => ({
+          title: 'Categories Product Details',
+          headerShown: true,
+          headerRight: () => (
+         <TouchableOpacity
+           onPress={() => navigation.navigate('Checkout', {product: cartItems})}
+           style={{marginRight: 15}}>
+           <Text style={{fontSize: 25}}>
+             {'🛒'}
+             {cartItems?.length}
+           </Text>
+         </TouchableOpacity>
+        )
+      })
+      }
       />
 
       <Stack.Screen name="PLP" component={ProductListingScreen} />
