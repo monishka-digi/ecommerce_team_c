@@ -32,8 +32,8 @@ const AppNavigator = () => {
               style={{marginRight: 15}}>
               <Text style={{fontSize: 25}}>
                 {'🛒'}
-                {cartItems?.length}
-              </Text>
+                {cartItems?.length >=1 && cartItems?.length }
+                </Text>
             </TouchableOpacity>
           )
         })
@@ -51,7 +51,7 @@ const AppNavigator = () => {
            style={{marginRight: 15}}>
            <Text style={{fontSize: 25}}>
              {'🛒'}
-             {cartItems?.length}
+             {cartItems?.length >=1 && cartItems?.length }
            </Text>
          </TouchableOpacity>
         )

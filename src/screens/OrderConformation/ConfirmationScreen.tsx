@@ -7,6 +7,7 @@ const ConfirmationScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {cartItems} = useSelector((state) => state?.cart);
   const { addresses, selectedAddressIndex } = useSelector((state) => state?.addresses);
+  const {user} = useSelector((state) => state?.user || "User"); 
   const selectedAddress = addresses[selectedAddressIndex] || {};
   
   const calculateTotal = () => {
@@ -34,7 +35,7 @@ const ConfirmationScreen = ({navigation}) => {
 
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Image source={{ uri: item.thumbnail }} style={styles.itemImage} />
@@ -51,7 +52,9 @@ const ConfirmationScreen = ({navigation}) => {
         <Text style={styles.totalText}>{"Total: "} {calculateTotal()}</Text>
       </View>
 
-      <Text style={styles.thankYouText}>{"Thank you for your purchase!"}</Text>
+      <Text style={styles.thankYouText}>
+        {`Congratulations ${user?.firstName} ${user?.lastName}, thank you for shopping with us!`}
+      </Text>
 
       <TouchableOpacity style={styles.button} onPress={handleClearCart}>
         <Text style={styles.buttonText}>{"Back to Home"}</Text>

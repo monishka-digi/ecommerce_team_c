@@ -46,7 +46,6 @@ const ProductListingScreen = ({navigation}) => {
       <Image source={{ uri: item?.thumbnail }} style={styles.thumbnail} />
       <Text style={styles.productTitle}>{item?.title}</Text>
       <Text style={styles.productPrice}>{"Price: "}{item?.price}</Text>
-      <Text style={styles.productDescription}>{item?.description}</Text>
     </TouchableOpacity>
   );
 
@@ -111,11 +110,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     marginBottom: 8,
-  },
-  productDescription: {
-    fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
   },
   loader: {
     marginTop: 20,

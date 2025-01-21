@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { addAddress, setSelectedAddressIndex } from "../../store/slices/addressSlice";
+import Toast from "react-native-toast-message";
 
 const AddressesScreen = ({navigation}) => {
   const [address, setAddress] = useState({
@@ -20,6 +21,11 @@ const AddressesScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const { addresses, selectedAddressIndex } = useSelector((state) => state?.addresses);
 
+
+  const isFormValid = () => {
+    return address.addressLine && address.city && address.state && address.pincode;
+  };
+
   const handleAddAddress = () => {
     if (
       address.addressLine &&
@@ -28,6 +34,14 @@ const AddressesScreen = ({navigation}) => {
       address.pincode
     ) {
       dispatch(addAddress(address));
+      Toast.show({
+        type: 'success',
+        position: 'top',
+        text1: 'Address Added!',
+        text2: 'Your address has been added successfully.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
       setAddress({
         addressLine: "",
         city: "",
@@ -36,6 +50,13 @@ const AddressesScreen = ({navigation}) => {
       });
     } else {
       console.log("Please fill all fields.");
+      Toast.show({
+        type: 'fail',
+        position: 'top',
+        text1: 'Something went wrong!',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
     }
   };
 
@@ -47,6 +68,7 @@ const AddressesScreen = ({navigation}) => {
           style={styles.input}
           placeholder="Address Line"
           value={address.addressLine}
+          placeholderTextColor="black"
           onChangeText={(text) =>
             setAddress((prev) => ({ ...prev, addressLine: text }))
           }
@@ -55,6 +77,7 @@ const AddressesScreen = ({navigation}) => {
           style={styles.input}
           placeholder="City"
           value={address.city}
+          placeholderTextColor="black"
           onChangeText={(text) =>
             setAddress((prev) => ({ ...prev, city: text }))
           }
@@ -62,6 +85,7 @@ const AddressesScreen = ({navigation}) => {
         <TextInput
           style={styles.input}
           placeholder="State"
+          placeholderTextColor="black"
           value={address.state}
           onChangeText={(text) =>
             setAddress((prev) => ({ ...prev, state: text }))
@@ -70,13 +94,17 @@ const AddressesScreen = ({navigation}) => {
         <TextInput
           style={styles.input}
           placeholder="Pincode"
+          placeholderTextColor="black"
           keyboardType="numeric"
           value={address.pincode}
           onChangeText={(text) =>
             setAddress((prev) => ({ ...prev, pincode: text }))
           }
         />
-        <TouchableOpacity onPress={handleAddAddress} style={styles.addAddress}><Text>{'Add Address'}</Text></TouchableOpacity>
+        <TouchableOpacity onPress={handleAddAddress} 
+        style={[styles.addAddress, isFormValid() ? {} : { backgroundColor: '#ccc' }]}
+        disabled={!isFormValid()}
+        ><Text style={{ color: isFormValid() ? '#fff' : '#666' }}>{'Add Address'}</Text></TouchableOpacity>
       </View>
 
       {/* Address List */}
@@ -114,7 +142,17 @@ const AddressesScreen = ({navigation}) => {
         }
       />
        <TouchableOpacity
-        onPress={() => navigation.navigate('OrderConformation')}
+        onPress={() =>{
+          Toast.show({
+            type: 'success',
+            position: 'top',
+            text1: 'Order Placed!',
+            text2: 'Your order has been successfully placed.',
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          navigation.navigate('OrderConformation')}
+        }
         style={styles.submitButton}
       >
         <Text style={styles.submitText}>{"Place Order"}</Text>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCartAPI } from '../../store/asyncThunks';
+import Toast from 'react-native-toast-message';
 
 const ProductDetailsScreen = ({ route }) => {
   const dispatch = useDispatch();
@@ -27,6 +28,14 @@ const handleAddToCart = (selectedProducts) => {
     }],
   };
   dispatch(addToCartAPI(payload)).unwrap();
+  Toast.show({
+    type: 'success',
+    position: 'top',
+    text1: 'Product Added!',
+    text2: 'The product has been added to your cart.',
+    visibilityTime: 3000,
+    autoHide: true,
+  });
 };
 
   return (
