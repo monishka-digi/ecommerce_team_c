@@ -54,6 +54,7 @@ const ProductListingScreen = ({navigation}) => {
       <TextInput
         style={styles.searchInput}
         placeholder="Search products"
+         placeholderTextColor="black"
         value={searchQuery}
         onChangeText={setSearchQuery}
       />

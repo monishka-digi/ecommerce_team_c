@@ -50,6 +50,7 @@ const Categories = ({navigation}) => {
       <TextInput
         style={styles.searchInput}
         placeholder="Search categories..."
+         placeholderTextColor="black"
         value={searchText}
         onChangeText={setSearchText}
       />
