@@ -12,7 +12,6 @@ const Categories = ({navigation}) => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-
   const filteredCategories = categories.filter((item) =>
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -61,17 +60,19 @@ const Categories = ({navigation}) => {
         renderItem={renderItem}
         keyExtractor={(item) => item?.name} 
         contentContainerStyle={styles.container}
+        numColumns={2}
         ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
       />
     </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   searchInput: {
     height: 40,
@@ -80,15 +81,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     paddingHorizontal: 10,
+    color: 'black',
+    backgroundColor: 'white',
   },
   container: {
     paddingBottom: 16,
   },
   categoryContainer: {
-    width: '48%',
-    marginVertical: 10,
-    padding: 16,
-    backgroundColor: '#e0f7fa',
+    height: 60,
+    flex: 1, 
+    margin: 8,
+    padding: 20,
+    backgroundColor: '#333',
     borderRadius: 10,
     elevation: 3,
     shadowColor: '#000',
@@ -99,19 +103,13 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#00796b',
+    color: '#fff',
     textAlign: 'center',
-  },
-  alignLeft: {
-    alignSelf: 'flex-start',
-  },
-  alignRight: {
-    alignSelf: 'flex-end',
   },
   noResults: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#888',
+    color: '#bbb',
     marginTop: 20,
   },
   loader: {
@@ -123,8 +121,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorText: {
-    color: 'red',
+    color: '#f00',
     fontSize: 16,
+  },
+  alignLeft: {
+    alignSelf: 'flex-start', 
+  },
+  alignRight: {
+    alignSelf: 'flex-end', 
   },
 });
 
