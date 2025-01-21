@@ -5,12 +5,12 @@ import { addToCartAPI } from '../../store/asyncThunks';
 
 const ProductDetailsScreen = ({ route }) => {
   const dispatch = useDispatch();
-  const { product } = route.params;
+  const { product } = route?.params || {};
   const {user} = useSelector((state) => state?.user);
   const {cartItems} = useSelector((state) => state?.cart);
   const { width } = Dimensions.get('window');
   const [count, setCount] = useState(1);
-  const isInCart = cartItems?.some((item) => item?.id === product.id);
+  const isInCart = cartItems?.some((item) => item?.id === product?.id);
 
   const handleDecrement = () => {
     if (count > 1) {
@@ -29,15 +29,6 @@ const handleAddToCart = (selectedProducts) => {
   dispatch(addToCartAPI(payload)).unwrap();
 };
 
-const handleRemoveFromCart = (selectedProducts) => {
-  console.log("99Remove", selectedProducts)
-  const payload = {
-    userId: user?.id,
-    productId: selectedProducts?.id,
-  };
-  // dispatch(removeFromCartAPI(payload)).unwrap();
-};
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <FlatList
@@ -47,7 +38,8 @@ const handleRemoveFromCart = (selectedProducts) => {
         renderItem={({ item }) => (
           <Image source={{ uri: item }} style={[styles.carouselImage, { width }]} />
         )}
-        keyExtractor={(item, index) => index.toString()}
+        // keyExtractor={(item) => item?.id?.toString()} 
+        // keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
       />
 
@@ -84,7 +76,7 @@ const handleRemoveFromCart = (selectedProducts) => {
       </View>
 
       {isInCart ? (
-        <TouchableOpacity style={styles.removeFromCartButton} onPress={() => handleRemoveFromCart(product)}>
+        <TouchableOpacity style={styles.removeFromCartButton} disabled={isInCart}>
           <Text style={styles.removeFromCartText}>{"Remove from Cart"}</Text>
         </TouchableOpacity>
       ) : (
@@ -154,7 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   removeFromCartButton: {
-    backgroundColor: '#FF0000',
+    backgroundColor: '#D3D3D3',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',

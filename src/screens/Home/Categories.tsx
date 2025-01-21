@@ -19,7 +19,6 @@ const Categories = ({navigation}) => {
 
   const handleCategoryClick = (categoryName) => {
     navigation.navigate('CategoriesProducts', { categoryName });
-    // Alert.alert('Category Selected', `You clicked on ${categoryName}`);
   };
 
   const renderItem = ({ item, index }) => (

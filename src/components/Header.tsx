@@ -8,6 +8,9 @@ const Header = ({ navigation }) => {
   return (
     <View style={styles.header}>
       <Text style={styles.title}>{"DigiSprint Solutions"}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.logoutText}>{"Logout"}</Text>
+        </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
         <Text style={styles.cartIcon}>🛒{cartItems?.length}</Text>
       </TouchableOpacity>
@@ -18,7 +21,7 @@ const Header = ({ navigation }) => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     padding: 15,
     backgroundColor: '#fff',
@@ -29,6 +32,11 @@ const styles = StyleSheet.create({
   },
   cartIcon: {
     fontSize: 25,
+  },
+  logoutText: {
+    fontSize: 16,
+    color: '#007BFF',
+    fontWeight: 'bold',
   },
 });
 

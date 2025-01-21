@@ -23,9 +23,11 @@ const LoginScreen = ({ navigation }) => {
       console.log('formData:', formData);
       const response = await dispatch(loggedInUser({ ...formData, expiresInMins: 30 })).unwrap();
       console.log('Login Successful:', response);
+      setIsLoading(false);
       navigation.replace('Home');
     } catch (err) {
       console.error('Login Failed:', err);
+      setIsLoading(false);
       setError(err.message || 'Login failed. Please try again.');
       Alert.alert('Login Error', err.message || 'Something went wrong.');
     } finally {

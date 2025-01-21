@@ -27,7 +27,7 @@ const CartScreen = ({navigation}) => {
         <FlatList
           data={cartItems}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(_, index) => index.toString()}
           contentContainerStyle={styles.list}
         />
       ) : (
