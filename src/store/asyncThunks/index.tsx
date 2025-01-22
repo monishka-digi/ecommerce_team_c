@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../axios/axiosInstance";
+import API_ENDPOINTS from "../../constants/apiConstant";
 
 export const loggedInUser = createAsyncThunk(
     "auth/loggedInUser",
     async (payload, { rejectWithValue }) => {
       try {
         const response = await axiosInstance.post(
-          "https://dummyjson.com/auth/login",
+          API_ENDPOINTS.LOGIN,
           payload,
         );
         return response?.data;
@@ -20,7 +21,7 @@ export const loggedInUser = createAsyncThunk(
     'categories/fetchCategories',
     async (_, { rejectWithValue }) => {
       try {
-        const response = await axiosInstance.get('https://dummyjson.com/products/categories');
+        const response = await axiosInstance.get(API_ENDPOINTS.CATEGORIES);
         return response.data;
       } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to fetch categories');
@@ -32,7 +33,7 @@ export const loggedInUser = createAsyncThunk(
     'products/fetchProducts',
     async (_, { rejectWithValue }) => {
       try {
-      const response = await axiosInstance.get('https://dummyjson.com/products');
+      const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTS);
       return response.data;
       } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to fetch products');
@@ -44,7 +45,7 @@ export const loggedInUser = createAsyncThunk(
     'products/fetchCaterotyProducts',
     async (categoryName, { rejectWithValue }) => {
       try {
-      const response = await axiosInstance.get(`https://dummyjson.com/products/category/${categoryName}`);
+      const response = await axiosInstance.get(API_ENDPOINTS.CATEGORY_PRODUCTS(categoryName));
       return response.data;
       } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to fetch category products');
@@ -56,7 +57,7 @@ export const loggedInUser = createAsyncThunk(
   'cart/addToCartAPI',
   async ( payload , { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('https://dummyjson.com/carts/add', payload);
+      const response = await axiosInstance.post(API_ENDPOINTS.ADD_TO_CART, payload);
       return response?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data || 'Failed to add products in cart');
@@ -67,10 +68,8 @@ export const loggedInUser = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   'products/searchProducts',
   async (query, { rejectWithValue }) => {
-    console.log("asyncccccccccc", query)
     try {
-    const response = await axiosInstance.get(`https://dummyjson.com/products/search?q=${query}`);
-    console.log("resssssssssssssssssss", response.data);
+    const response = await axiosInstance.get(API_ENDPOINTS.SEARCH_PRODUCTS(query));
     return response?.data; 
   } catch (error) {
     return rejectWithValue(error?.response?._data || 'Failed to search products');
