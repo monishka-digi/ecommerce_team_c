@@ -11,16 +11,18 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCaterotyProducts} from '../../store/asyncThunks';
+import { AppDispatch } from '../../store';
+
 
 const CategoriesProduct = ({route, navigation}) => {
-  const dispatch = useDispatch();
-  const {categoryName} = route?.params;
+  const dispatch = useDispatch<AppDispatch>();
+  const {categorySlug} = route?.params;
   const {products} = useSelector(state => state?.categories?.categoryProducts);
   const {error, loading} = useSelector(state => state?.categories);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    dispatch(fetchCaterotyProducts(categoryName));
+    dispatch(fetchCaterotyProducts(categorySlug));
   }, [dispatch]);
 
   const filteredProducts = products?.filter(product =>
@@ -58,7 +60,6 @@ const CategoriesProduct = ({route, navigation}) => {
   }
   return (
     <View style={styles.container}>
-      {/* Search Input Field */}
       <TextInput
         style={styles.searchInput}
         placeholder="Search products"
@@ -67,11 +68,10 @@ const CategoriesProduct = ({route, navigation}) => {
         onChangeText={setSearchQuery}
       />
 
-      {/* Product List with FlatList */}
       <FlatList
         data={filteredProducts}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         numColumns={2}
         ListEmptyComponent={
           <Text style={styles.noResults}>{'No products found.'}</Text>

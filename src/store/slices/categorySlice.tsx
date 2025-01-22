@@ -1,7 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchCategories, fetchCaterotyProducts } from '../asyncThunks';
 
-const initialState = {
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+interface CategoryState {
+  categories: Category[];
+  categoryProducts: any[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: CategoryState = {
   categories: [],
   categoryProducts: [],
   loading: false,

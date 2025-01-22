@@ -1,11 +1,26 @@
+import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
 import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
-const CartScreen = ({navigation}) => {
-  const {cartItems} = useSelector(state => state?.cart);
+type CartProps = {
+  navigation: NavigationProp<any>;
+};
 
-  const renderItem = ({ item }) => (
+interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  thumbnail: string;
+  total: number;
+}
+
+const CartScreen: React.FC<CartProps> = ({navigation}) => {
+  const {cartItems} = useSelector((state: RootState) => state?.cart);
+
+  const renderItem = ({ item }: { item: CartItem }) => (
     <TouchableOpacity 
     style={styles.cartItem}
     onPress={() => navigation.navigate('PDP', {product: item})}
