@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,24 +6,43 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { addAddress, setSelectedAddressIndex } from "../../store/slices/addressSlice";
-import Toast from "react-native-toast-message";
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addAddress,
+  setSelectedAddressIndex,
+} from '../../store/slices/addressSlice';
+import Toast from 'react-native-toast-message';
+import {RootState} from '../../store';
+import {NavigationProp} from '@react-navigation/native';
+import ToastMessages from '../../constants/toastMessages';
 
-const AddressesScreen = ({navigation}) => {
-  const [address, setAddress] = useState({
-    addressLine: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+type AddressesProps = {
+  navigation: NavigationProp<any>;
+};
+interface Address {
+  addressLine: string;
+  city: string;
+  state: string;
+  pincode: string;
+}
+
+const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
   const dispatch = useDispatch();
-  const { addresses, selectedAddressIndex } = useSelector((state) => state?.addresses);
-
+  const [address, setAddress] = useState<Address>({
+    addressLine: '',
+    city: '',
+    state: '',
+    pincode: '',
+  });
+  const {addresses, selectedAddressIndex} = useSelector(
+    (state: RootState) => state?.addresses,
+  );
 
   const isFormValid = () => {
-    return address.addressLine && address.city && address.state && address.pincode;
+    return (
+      address.addressLine && address.city && address.state && address.pincode
+    );
   };
 
   const handleAddAddress = () => {
@@ -34,43 +53,28 @@ const AddressesScreen = ({navigation}) => {
       address.pincode
     ) {
       dispatch(addAddress(address));
-      Toast.show({
-        type: 'success',
-        position: 'top',
-        text1: 'Address Added!',
-        text2: 'Your address has been added successfully.',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+      Toast.show(ToastMessages.ADDRESS_ADDED);
       setAddress({
-        addressLine: "",
-        city: "",
-        state: "",
-        pincode: "",
+        addressLine: '',
+        city: '',
+        state: '',
+        pincode: '',
       });
     } else {
-      console.log("Please fill all fields.");
-      Toast.show({
-        type: 'fail',
-        position: 'top',
-        text1: 'Something went wrong!',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+      Toast.show(ToastMessages.ADDRESS_ERROR);
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Input Fields */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder="Address Line"
           value={address.addressLine}
           placeholderTextColor="black"
-          onChangeText={(text) =>
-            setAddress((prev) => ({ ...prev, addressLine: text }))
+          onChangeText={text =>
+            setAddress(prev => ({...prev, addressLine: text}))
           }
         />
         <TextInput
@@ -78,18 +82,14 @@ const AddressesScreen = ({navigation}) => {
           placeholder="City"
           value={address.city}
           placeholderTextColor="black"
-          onChangeText={(text) =>
-            setAddress((prev) => ({ ...prev, city: text }))
-          }
+          onChangeText={text => setAddress(prev => ({...prev, city: text}))}
         />
         <TextInput
           style={styles.input}
           placeholder="State"
           placeholderTextColor="black"
           value={address.state}
-          onChangeText={(text) =>
-            setAddress((prev) => ({ ...prev, state: text }))
-          }
+          onChangeText={text => setAddress(prev => ({...prev, state: text}))}
         />
         <TextInput
           style={styles.input}
@@ -97,31 +97,33 @@ const AddressesScreen = ({navigation}) => {
           placeholderTextColor="black"
           keyboardType="numeric"
           value={address.pincode}
-          onChangeText={(text) =>
-            setAddress((prev) => ({ ...prev, pincode: text }))
-          }
+          onChangeText={text => setAddress(prev => ({...prev, pincode: text}))}
         />
-        <TouchableOpacity onPress={handleAddAddress} 
-        style={[styles.addAddress, isFormValid() ? {} : { backgroundColor: '#ccc' }]}
-        disabled={!isFormValid()}
-        ><Text style={{ color: isFormValid() ? '#fff' : '#666' }}>{'Add Address'}</Text></TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleAddAddress}
+          style={[
+            styles.addAddress,
+            isFormValid() ? {} : {backgroundColor: '#ccc'},
+          ]}
+          disabled={!isFormValid()}>
+          <Text style={{color: isFormValid() ? '#fff' : '#666'}}>
+            {'Add Address'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Address List */}
       <FlatList
         data={addresses}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <View
             style={[
               styles.card,
               selectedAddressIndex === index && styles.selectedCard,
-            ]}
-          >
+            ]}>
             <TouchableOpacity
               style={styles.radioButton}
-              onPress={() => dispatch(setSelectedAddressIndex(index))}
-            >
+              onPress={() => dispatch(setSelectedAddressIndex(index))}>
               <View
                 style={[
                   styles.radioInner,
@@ -132,30 +134,22 @@ const AddressesScreen = ({navigation}) => {
             <View>
               <Text style={styles.text}>{item.addressLine}</Text>
               <Text style={styles.text}>
-                {item.city}, {item.state} - {item.pincode}
+                {item?.city}, {item?.state} - {item?.pincode}
               </Text>
             </View>
           </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.noAddressText}>{"No addresses added yet."}</Text>
+          <Text style={styles.noAddressText}>{'No addresses added yet.'}</Text>
         }
       />
-       <TouchableOpacity
-        onPress={() =>{
-          Toast.show({
-            type: 'success',
-            position: 'top',
-            text1: 'Order Placed!',
-            text2: 'Your order has been successfully placed.',
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-          navigation.navigate('OrderConformation')}
-        }
-        style={styles.submitButton}
-      >
-        <Text style={styles.submitText}>{"Place Order"}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          Toast.show(ToastMessages.ORDER_PLACED);
+          navigation.navigate('OrderConformation');
+        }}
+        style={styles.submitButton}>
+        <Text style={styles.submitText}>{'Place Order'}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -165,72 +159,72 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
   },
   inputContainer: {
     marginBottom: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 8,
     padding: 8,
     marginBottom: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   card: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 12,
     marginVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#fff",
+    borderColor: '#ddd',
+    backgroundColor: '#fff',
   },
   selectedCard: {
-    borderColor: "#4caf50",
+    borderColor: '#4caf50',
   },
   radioButton: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#4caf50",
-    justifyContent: "center",
-    alignItems: "center",
+    borderColor: '#4caf50',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 12,
   },
   radioInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   radioSelected: {
-    backgroundColor: "#4caf50",
+    backgroundColor: '#4caf50',
   },
   text: {
     fontSize: 16,
   },
   noAddressText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 16,
-    color: "#999",
+    color: '#999',
     marginTop: 16,
   },
   addAddress: {
     backgroundColor: '#007BFF',
     padding: 12,
     borderRadius: 8,
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,               
-    shadowColor: '#000',   
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,        
-    shadowRadius: 4,          
-    elevation: 3,          
+    margin: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   submitButton: {
     backgroundColor: '#28a745',

@@ -1,11 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
+interface Address {
+  addressLine: string;
+  city: string;
+  state: string;
+  pincode: string;
+}
+interface AddressState {
+  addresses: Address[];
+  selectedAddressIndex: number;
+}
+
+const initialState: AddressState = {
+  addresses: [],
+  selectedAddressIndex: 0,
+};
 
 const addressSlice = createSlice({
   name: 'addresses',
-  initialState: {
-    addresses: [],
-    selectedAddressIndex: 0,
-  },
+  initialState,
   reducers: {
     addAddress: (state, action) => {
       state.addresses.push(action.payload);
