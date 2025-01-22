@@ -1,17 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCartAPI } from '../../store/asyncThunks';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {addToCartAPI} from '../../store/asyncThunks';
+import {RootState} from '../../store';
+import ToastMessages from '../../constants/toastMessages';
 import Toast from 'react-native-toast-message';
 
-const ProductDetailsScreen = ({ route }) => {
+interface Product {
+  id: string;
+  title: string;
+  price: string;
+  description: string;
+  images: string[];
+  rating: string;
+  warrantyInformation: string;
+  shippingInformation: string;
+  returnPolicy: string;
+}
+interface ProductDetailsProps {
+  route: {
+    params: {
+      product: Product;
+    };
+  };
+}
+interface CartItem {
+  id: string;
+  quantity: number;
+}
+
+const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
   const dispatch = useDispatch();
-  const { product } = route?.params || {};
-  const {user} = useSelector((state) => state?.user);
-  const {cartItems} = useSelector((state) => state?.cart);
-  const { width } = Dimensions.get('window');
+  const {product} = route?.params || {};
+  const {user} = useSelector((state: RootState) => state?.user);
+  const {cartItems} = useSelector((state: RootState) => state?.cart);
   const [count, setCount] = useState(1);
-  const isInCart = cartItems?.some((item) => item?.id === product?.id);
+  const {width} = Dimensions.get('window');
+  const isInCart = cartItems?.some(
+    (item: CartItem) => item?.id === product?.id,
+  );
 
   const handleDecrement = () => {
     if (count > 1) {
@@ -19,24 +55,20 @@ const ProductDetailsScreen = ({ route }) => {
     }
   };
 
-const handleAddToCart = (selectedProducts) => {
-  const payload = {
-    userId: user?.id,
-    products: [{
-      id: selectedProducts?.id,
-      quantity: count,
-    }],
+  const handleAddToCart = (selectedProducts: Product) => {
+    if (!user) return;
+    const payload = {
+      userId: user?.id,
+      products: [
+        {
+          id: selectedProducts?.id,
+          quantity: count,
+        },
+      ],
+    };
+    dispatch(addToCartAPI(payload)).unwrap();
+    Toast.show(ToastMessages.PRODUCT_ADDED);
   };
-  dispatch(addToCartAPI(payload)).unwrap();
-  Toast.show({
-    type: 'success',
-    position: 'top',
-    text1: 'Product Added!',
-    text2: 'The product has been added to your cart.',
-    visibilityTime: 3000,
-    autoHide: true,
-  });
-};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -44,53 +76,62 @@ const handleAddToCart = (selectedProducts) => {
         data={product.images}
         horizontal
         pagingEnabled
-        renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={[styles.carouselImage, { width }]} />
+        renderItem={({item}) => (
+          <Image source={{uri: item}} style={[styles.carouselImage, {width}]} />
         )}
-        // keyExtractor={(item) => item?.id?.toString()} 
-        // keyExtractor={(item, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
+        keyExtractor={(_, index) => index.toString()}
       />
 
-      {/* Product Details */}
       <Text style={styles.title}>{product.title}</Text>
-      <Text style={styles.price}>{"Price: "}{product.price}</Text>
+      <Text style={styles.price}>
+        {'Price: '}
+        {product.price}
+      </Text>
       <Text style={styles.description}>{product.description}</Text>
 
-      {/* Additional Details */}
       <View style={styles.detailsContainer}>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{"Rating: "}</Text> {product.rating}
+          <Text style={styles.detailLabel}>{'Rating: '}</Text> {product.rating}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{"Warranty Information: "}</Text> {product.warrantyInformation}
+          <Text style={styles.detailLabel}>{'Warranty Information: '}</Text>{' '}
+          {product.warrantyInformation}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{"Shipping Information: "}</Text> {product.shippingInformation}
+          <Text style={styles.detailLabel}>{'Shipping Information: '}</Text>{' '}
+          {product.shippingInformation}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{"Return Policy: "}</Text> {product.returnPolicy}
+          <Text style={styles.detailLabel}>{'Return Policy: '}</Text>{' '}
+          {product.returnPolicy}
         </Text>
       </View>
 
-       {/* Quantity Selector */}
-       <View style={styles.quantityContainer}>
-        <TouchableOpacity style={styles.quantityButton} onPress={handleDecrement}>
+      <View style={styles.quantityContainer}>
+        <TouchableOpacity
+          style={styles.quantityButton}
+          onPress={handleDecrement}>
           <Text style={styles.quantityButtonText}>-</Text>
         </TouchableOpacity>
         <Text style={styles.quantityText}>{count}</Text>
-        <TouchableOpacity style={styles.quantityButton} onPress={() => setCount(prevCount => prevCount + 1)}>
+        <TouchableOpacity
+          style={styles.quantityButton}
+          onPress={() => setCount(prevCount => prevCount + 1)}>
           <Text style={styles.quantityButtonText}>+</Text>
         </TouchableOpacity>
       </View>
 
       {isInCart ? (
-        <TouchableOpacity style={styles.removeFromCartButton} disabled={isInCart}>
-          <Text style={styles.removeFromCartText}>{"Remove from Cart"}</Text>
+        <TouchableOpacity
+          style={styles.removeFromCartButton}
+          disabled={isInCart}>
+          <Text style={styles.removeFromCartText}>{'Remove from Cart'}</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(product)}>
-          <Text style={styles.addToCartText}>{"Add to Cart"}</Text>
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={() => handleAddToCart(product)}>
+          <Text style={styles.addToCartText}>{'Add to Cart'}</Text>
         </TouchableOpacity>
       )}
     </ScrollView>

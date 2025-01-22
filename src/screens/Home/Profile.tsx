@@ -1,10 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  gender: string;
+  image: string;
+}
 
-const Profile = () => {
-  const { user } = useSelector((state) => state?.user);
-
+const Profile: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state?.user) as unknown as {
+    user: User | null;
+  };
   return (
     <View style={styles.container}>
       <Image source={{ uri: user?.image }} style={styles.profileImage} />

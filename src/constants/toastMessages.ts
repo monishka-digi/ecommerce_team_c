@@ -52,6 +52,15 @@ type ToastMessage = {
       visibilityTime: 3000,
       autoHide: true,
     } as ToastMessage,
+
+    PRODUCT_ADDED: {
+        type: 'success',
+        position: 'top',
+        text1: 'Product Added!',
+        text2: 'The product has been added to your cart.',
+        visibilityTime: 3000,
+        autoHide: true,
+      } as ToastMessage,
   };
   
   export default ToastMessages;

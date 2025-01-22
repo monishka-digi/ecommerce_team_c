@@ -1,73 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCategories } from '../../store/asyncThunks';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchCategories} from '../../store/asyncThunks';
+import {NavigationProp} from '@react-navigation/native';
+import {AppDispatch, RootState} from '../../store';
 
-const Categories = ({navigation}) => {
+type CategoriesProps = {
+  navigation: NavigationProp<any>;
+};
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+const Categories: React.FC<CategoriesProps> = ({navigation}) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [searchText, setSearchText] = useState('');
-  const dispatch = useDispatch();
-
-  const { categories, loading, error } = useSelector((state) => state?.categories);
+  const {categories, loading, error} = useSelector(
+    (state: RootState) => state?.categories,
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-  const filteredCategories = categories.filter((item) =>
-    item.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredCategories = categories.filter((item: Category) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase()),
   );
 
-  const handleCategoryClick = (categoryName) => {
-    navigation.navigate('CategoriesProducts', { categoryName });
+  const handleCategoryClick = (categorySlug: string) => {
+    navigation.navigate('CategoriesProducts', {categorySlug});
   };
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}: {item: Category; index: number}) => (
     <TouchableOpacity
       style={[
         styles.categoryContainer,
         index % 2 === 0 ? styles.alignLeft : styles.alignRight,
       ]}
-      onPress={() => handleCategoryClick(item.slug)}
-    >
+      onPress={() => handleCategoryClick(item.slug)}>
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#00796b" style={styles.loader} />;
+    return (
+      <ActivityIndicator size="large" color="#00796b" style={styles.loader} />
+    );
   }
 
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{"Error: "}{error}</Text>
+        <Text style={styles.errorText}>
+          {'Error: '}
+          {error}
+        </Text>
       </View>
     );
   }
 
   return (
     <View style={styles.mainContainer}>
-      {/* Search Input Field */}
       <TextInput
         style={styles.searchInput}
         placeholder="Search categories..."
-         placeholderTextColor="black"
+        placeholderTextColor="black"
         value={searchText}
         onChangeText={setSearchText}
       />
 
-      {/* Grid View */}
       <FlatList
         data={filteredCategories}
         renderItem={renderItem}
-        keyExtractor={(item) => item?.name} 
+        keyExtractor={item => item?.name}
         contentContainerStyle={styles.container}
         numColumns={2}
-        ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
+        ListEmptyComponent={
+          <Text style={styles.noResults}>{'No categories found.'}</Text>
+        }
       />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -90,14 +114,14 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     height: 60,
-    flex: 1, 
+    flex: 1,
     margin: 8,
     padding: 20,
     backgroundColor: '#333',
     borderRadius: 10,
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
   },
@@ -126,10 +150,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   alignLeft: {
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
   },
   alignRight: {
-    alignSelf: 'flex-end', 
+    alignSelf: 'flex-end',
   },
 });
 

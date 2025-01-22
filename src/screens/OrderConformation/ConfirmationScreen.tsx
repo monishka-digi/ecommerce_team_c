@@ -2,16 +2,36 @@ import React from 'react';
 import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetCart } from '../../store/slices/cartSlice';
+import { NavigationProp } from '@react-navigation/native';
+import { AppDispatch, RootState } from '../../store';
 
-const ConfirmationScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const {cartItems} = useSelector((state) => state?.cart);
-  const { addresses, selectedAddressIndex } = useSelector((state) => state?.addresses);
-  const {user} = useSelector((state) => state?.user || "User"); 
-  const selectedAddress = addresses[selectedAddressIndex] || {};
+type ConfirmationProps = {
+  navigation: NavigationProp<any>;
+};
+interface CartItem {
+  id: string;
+  title: string;
+  quantity: number;
+  price: number;
+  total: number;
+  thumbnail: string;
+}
+interface Address {
+  addressLine: string;
+  city: string;
+  state: string;
+  pincode: string;
+}
+
+const ConfirmationScreen: React.FC<ConfirmationProps> = ({navigation}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const cartItems: CartItem[] = useSelector((state: RootState) => state?.cart?.cartItems);
+  const { addresses, selectedAddressIndex } = useSelector((state: RootState) => state?.addresses);
+  const user = useSelector((state: RootState) => state?.user?.user);
+  const selectedAddress:  Address | undefined  = addresses[selectedAddressIndex] || {};
   
-  const calculateTotal = () => {
-    return cartItems?.reduce((total, item) => total + item.quantity * item.price, 0)?.toFixed(2);
+  const calculateTotal = (): string => {
+    return cartItems?.reduce((total: number, item: CartItem) => total + item.quantity * item.price, 0)?.toFixed(2);
   };
 
   const handleClearCart = () => {

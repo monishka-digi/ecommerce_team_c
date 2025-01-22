@@ -7,21 +7,10 @@ type LoginPayload = {
   password: string;
   expiresInMins: number;
 };
-interface SearchQuery {
-  query: string;
-}
-interface Product {
+interface Category {
   id: string;
   name: string;
-  description: string;
-  price: number;
-}
-interface SearchResponse {
-  products: Product[];
-  total: number;
-}
-interface SearchProductsError {
-  message: string;
+  slug: string;
 }
 
 export const loggedInUser = createAsyncThunk(
@@ -41,7 +30,7 @@ export const fetchCategories = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const response = await axiosInstance.get(API_ENDPOINTS.CATEGORIES);
-      return response.data;
+      return response.data as Category[];
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data || 'Failed to fetch categories',
