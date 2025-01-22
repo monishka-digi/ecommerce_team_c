@@ -12,6 +12,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProducts, searchProducts} from '../../store/asyncThunks';
 import {AppDispatch, RootState} from '../../store';
+import {CART_SCREEN_TEXT, TEXTS} from '../../constants/textConstant';
 
 interface Product {
   id: string;
@@ -74,7 +75,7 @@ const ProductListingScreen: React.FC<ProductListingScreenProps> = ({
       <Image source={{uri: item?.thumbnail}} style={styles.thumbnail} />
       <Text style={styles.productTitle}>{item?.title}</Text>
       <Text style={styles.productPrice}>
-        {'Price: '}
+        {CART_SCREEN_TEXT.priceLabel}
         {item?.price}
       </Text>
     </TouchableOpacity>
@@ -84,7 +85,7 @@ const ProductListingScreen: React.FC<ProductListingScreenProps> = ({
     <View style={styles.container}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search products"
+        placeholder={TEXTS.SEARCH_PLACEHOLDERPRODUCTS}
         placeholderTextColor="black"
         value={searchQuery}
         onChangeText={setSearchQuery}
@@ -93,10 +94,10 @@ const ProductListingScreen: React.FC<ProductListingScreenProps> = ({
       <FlatList
         data={products}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         numColumns={2}
         ListEmptyComponent={
-          <Text style={styles.noResults}>{'No categories found.'}</Text>
+          <Text style={styles.noResults}>{TEXTS.NO_CATEGORIES_FOUND}</Text>
         }
       />
     </View>

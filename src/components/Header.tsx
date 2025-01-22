@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import Texts from '../constants/textConstant';
+import {Texts} from '../constants/textConstant';
 
 type HeaderProps = {
   navigation: NavigationProp<any>;

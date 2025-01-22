@@ -10,7 +10,7 @@ import {Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddressesScreen from '../screens/Addresses/AddressScreen';
 import ConformationScreen from '../screens/OrderConformation/ConfirmationScreen';
-import { RootState } from '../store';
+import {RootState} from '../store';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,48 +24,56 @@ const AppNavigator = () => {
       <Stack.Screen
         name="PDP"
         component={ProductDetailsScreen}
-        options={({ navigation }) => ({
+        options={({navigation}) => ({
           title: 'Product Details',
           headerShown: true,
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('Checkout', {product: cartItems})}
+              onPress={() =>
+                navigation.navigate('Checkout', {product: cartItems})
+              }
               style={{marginRight: 15}}>
               <Text style={{fontSize: 25}}>
                 {'🛒'}
-                {cartItems?.length >=1 && cartItems?.length }
-                </Text>
+                {cartItems?.length >= 1 && cartItems?.length}
+              </Text>
             </TouchableOpacity>
-          )
-        })
-        }
+          ),
+        })}
       />
       <Stack.Screen
         name="CategoriesProducts"
         component={CategoriesProduct}
-        options={({ navigation }) => ({
+        options={({navigation}) => ({
           title: 'Categories Product Details',
           headerShown: true,
           headerRight: () => (
-         <TouchableOpacity
-           onPress={() => navigation.navigate('Checkout', {product: cartItems})}
-           style={{marginRight: 15}}>
-           <Text style={{fontSize: 25}}>
-             {'🛒'}
-             {cartItems?.length >=1 && cartItems?.length }
-           </Text>
-         </TouchableOpacity>
-        )
-      })
-      }
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Checkout', {product: cartItems})
+              }
+              style={{marginRight: 15}}>
+              <Text style={{fontSize: 25}}>
+                {'🛒'}
+                {cartItems?.length >= 1 && cartItems?.length}
+              </Text>
+            </TouchableOpacity>
+          ),
+        })}
       />
 
       <Stack.Screen name="PLP" component={ProductListingScreen} />
-      <Stack.Screen name="Checkout" component={CartScreen} options={{title: 'Checkout', headerShown: true }}/>
-      <Stack.Screen name="Addresses" component={AddressesScreen} options={{title: 'Address Details', headerShown: true }} />
+      <Stack.Screen
+        name="Checkout"
+        component={CartScreen}
+        options={{title: 'Checkout', headerShown: true}}
+      />
+      <Stack.Screen
+        name="Addresses"
+        component={AddressesScreen}
+        options={{title: 'Address Details', headerShown: true}}
+      />
       <Stack.Screen name="OrderConformation" component={ConformationScreen} />
-
-      
     </Stack.Navigator>
   );
 };

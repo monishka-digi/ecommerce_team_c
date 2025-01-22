@@ -12,6 +12,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {fetchCategories} from '../../store/asyncThunks';
 import {NavigationProp} from '@react-navigation/native';
 import {AppDispatch, RootState} from '../../store';
+import {TEXTS} from '../../constants/textConstant';
 
 type CategoriesProps = {
   navigation: NavigationProp<any>;
@@ -62,7 +63,7 @@ const Categories: React.FC<CategoriesProps> = ({navigation}) => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {'Error: '}
+          {TEXTS.ERROR}
           {error}
         </Text>
       </View>
@@ -73,7 +74,7 @@ const Categories: React.FC<CategoriesProps> = ({navigation}) => {
     <View style={styles.mainContainer}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search categories..."
+        placeholder={TEXTS.SEARCH_PLACEHOLDER}
         placeholderTextColor="black"
         value={searchText}
         onChangeText={setSearchText}
@@ -86,7 +87,7 @@ const Categories: React.FC<CategoriesProps> = ({navigation}) => {
         contentContainerStyle={styles.container}
         numColumns={2}
         ListEmptyComponent={
-          <Text style={styles.noResults}>{'No categories found.'}</Text>
+          <Text style={styles.noResults}>{TEXTS.NO_CATEGORIES_FOUND}</Text>
         }
       />
     </View>
