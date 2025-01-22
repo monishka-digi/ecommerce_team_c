@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCaterotyProducts} from '../../store/asyncThunks';
-import { AppDispatch } from '../../store';
-
+import {AppDispatch} from '../../store';
+import {TEXTS} from '../../constants/textConstant';
 
 const CategoriesProduct = ({route, navigation}) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,7 +36,7 @@ const CategoriesProduct = ({route, navigation}) => {
       <Image source={{uri: item?.thumbnail}} style={styles.thumbnail} />
       <Text style={styles.productTitle}>{item?.title}</Text>
       <Text style={styles.productPrice}>
-        {'Price: '}
+        {TEXTS.PRICE_LABEL}
         {item?.price}
       </Text>
     </TouchableOpacity>
@@ -52,7 +52,7 @@ const CategoriesProduct = ({route, navigation}) => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {'Error: '}
+          {TEXTS.ERROR_MESSAGE}
           {error}
         </Text>
       </View>
@@ -62,8 +62,8 @@ const CategoriesProduct = ({route, navigation}) => {
     <View style={styles.container}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search products"
-         placeholderTextColor="black"
+        placeholder={TEXTS.SEARCH_PLACEHOLDERPRODUCTS}
+        placeholderTextColor="black"
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
@@ -74,7 +74,7 @@ const CategoriesProduct = ({route, navigation}) => {
         keyExtractor={(_, index) => index.toString()}
         numColumns={2}
         ListEmptyComponent={
-          <Text style={styles.noResults}>{'No products found.'}</Text>
+          <Text style={styles.noResults}>{TEXTS.NO_PRODUCTS_FOUND}</Text>
         }
       />
     </View>

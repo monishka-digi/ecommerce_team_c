@@ -1,8 +1,16 @@
-import { NavigationProp } from '@react-navigation/native';
+import {NavigationProp} from '@react-navigation/native';
 import React from 'react';
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../store';
+import {CART_SCREEN_TEXT} from '../../constants/textConstant';
 
 type CartProps = {
   navigation: NavigationProp<any>;
@@ -20,24 +28,30 @@ interface CartItem {
 const CartScreen: React.FC<CartProps> = ({navigation}) => {
   const {cartItems} = useSelector((state: RootState) => state?.cart);
 
-  const renderItem = ({ item }: { item: CartItem }) => (
-    <TouchableOpacity 
-    style={styles.cartItem}
-    onPress={() => navigation.navigate('PDP', {product: item})}
-    >
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
+  const renderItem = ({item}: {item: CartItem}) => (
+    <TouchableOpacity
+      style={styles.cartItem}
+      onPress={() => navigation.navigate('PDP', {product: item})}>
+      <Image source={{uri: item.thumbnail}} style={styles.image} />
       <View style={styles.itemDetails}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>{"Price: "} {item.price.toFixed(2)}</Text>
-        <Text style={styles.quantity}>{"Quantity: "} {item.quantity}</Text>
-        <Text style={styles.total}>{'Total: '} {item.total.toFixed(2)}</Text>
+        <Text style={styles.price}>
+          {CART_SCREEN_TEXT.priceLabel} {item.price.toFixed(2)}
+        </Text>
+        <Text style={styles.quantity}>
+          {CART_SCREEN_TEXT.quantityLabel}
+          {item.quantity}
+        </Text>
+        <Text style={styles.total}>
+          {CART_SCREEN_TEXT.totalLabel} {item.total.toFixed(2)}
+        </Text>
       </View>
-      </TouchableOpacity>
+    </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{"Your Cart"}</Text>
+      <Text style={styles.header}>{CART_SCREEN_TEXT.header}</Text>
       {cartItems.length > 0 ? (
         <FlatList
           data={cartItems}
@@ -46,11 +60,13 @@ const CartScreen: React.FC<CartProps> = ({navigation}) => {
           contentContainerStyle={styles.list}
         />
       ) : (
-        <Text style={styles.emptyText}>{"Your cart is empty."}</Text>
+        <Text style={styles.emptyText}>{CART_SCREEN_TEXT.emptyCart}</Text>
       )}
       {cartItems?.length > 0 && (
-        <TouchableOpacity style={styles.payNowButton} onPress={() =>  navigation.navigate('Addresses')}>
-          <Text style={styles.payNowText}>{"Pay Now"}</Text>
+        <TouchableOpacity
+          style={styles.payNowButton}
+          onPress={() => navigation.navigate('Addresses')}>
+          <Text style={styles.payNowText}>{CART_SCREEN_TEXT.payNowButton}</Text>
         </TouchableOpacity>
       )}
     </View>

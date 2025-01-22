@@ -14,6 +14,7 @@ import {addToCartAPI} from '../../store/asyncThunks';
 import {RootState} from '../../store';
 import ToastMessages from '../../constants/toastMessages';
 import Toast from 'react-native-toast-message';
+import {TEXTS} from '../../constants/textConstant';
 
 interface Product {
   id: string;
@@ -26,19 +27,12 @@ interface Product {
   shippingInformation: string;
   returnPolicy: string;
 }
-interface ProductDetailsProps {
-  route: {
-    params: {
-      product: Product;
-    };
-  };
-}
 interface CartItem {
   id: string;
   quantity: number;
 }
 
-const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
+const ProductDetailsScreen = ({route}) => {
   const dispatch = useDispatch();
   const {product} = route?.params || {};
   const {user} = useSelector((state: RootState) => state?.user);
@@ -84,25 +78,26 @@ const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
 
       <Text style={styles.title}>{product.title}</Text>
       <Text style={styles.price}>
-        {'Price: '}
+        {TEXTS.PRICE}
         {product.price}
       </Text>
       <Text style={styles.description}>{product.description}</Text>
 
       <View style={styles.detailsContainer}>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{'Rating: '}</Text> {product.rating}
+          <Text style={styles.detailLabel}>{TEXTS.RATING}</Text>{' '}
+          {product.rating}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{'Warranty Information: '}</Text>{' '}
+          <Text style={styles.detailLabel}>{TEXTS.WARRANTY_INFORMATION}</Text>{' '}
           {product.warrantyInformation}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{'Shipping Information: '}</Text>{' '}
+          <Text style={styles.detailLabel}>{TEXTS.SHIPPING_INFORMATION}</Text>{' '}
           {product.shippingInformation}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>{'Return Policy: '}</Text>{' '}
+          <Text style={styles.detailLabel}>{TEXTS.RETURN_POLICY}</Text>{' '}
           {product.returnPolicy}
         </Text>
       </View>
@@ -111,13 +106,13 @@ const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
         <TouchableOpacity
           style={styles.quantityButton}
           onPress={handleDecrement}>
-          <Text style={styles.quantityButtonText}>-</Text>
+          <Text style={styles.quantityButtonText}>{TEXTS.DECREMENT}</Text>
         </TouchableOpacity>
         <Text style={styles.quantityText}>{count}</Text>
         <TouchableOpacity
           style={styles.quantityButton}
           onPress={() => setCount(prevCount => prevCount + 1)}>
-          <Text style={styles.quantityButtonText}>+</Text>
+          <Text style={styles.quantityButtonText}>{TEXTS.INCREMENT}</Text>
         </TouchableOpacity>
       </View>
 
@@ -125,13 +120,16 @@ const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
         <TouchableOpacity
           style={styles.removeFromCartButton}
           disabled={isInCart}>
-          <Text style={styles.removeFromCartText}>{'Remove from Cart'}</Text>
+          <Text style={styles.removeFromCartText}>
+            {' '}
+            {TEXTS.REMOVE_FROM_CART_DISABLED}
+          </Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.addToCartButton}
           onPress={() => handleAddToCart(product)}>
-          <Text style={styles.addToCartText}>{'Add to Cart'}</Text>
+          <Text style={styles.addToCartText}>{TEXTS.ADD_TO_CART_DISABLED}</Text>
         </TouchableOpacity>
       )}
     </ScrollView>

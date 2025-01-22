@@ -1,9 +1,17 @@
 import React from 'react';
-import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { resetCart } from '../../store/slices/cartSlice';
-import { NavigationProp } from '@react-navigation/native';
-import { AppDispatch, RootState } from '../../store';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {resetCart} from '../../store/slices/cartSlice';
+import {NavigationProp} from '@react-navigation/native';
+import {AppDispatch, RootState} from '../../store';
+import {TEXTS} from '../../constants/textConstant';
 
 type ConfirmationProps = {
   navigation: NavigationProp<any>;
@@ -25,43 +33,56 @@ interface Address {
 
 const ConfirmationScreen: React.FC<ConfirmationProps> = ({navigation}) => {
   const dispatch = useDispatch<AppDispatch>();
-  const cartItems: CartItem[] = useSelector((state: RootState) => state?.cart?.cartItems);
-  const { addresses, selectedAddressIndex } = useSelector((state: RootState) => state?.addresses);
+  const cartItems: CartItem[] = useSelector(
+    (state: RootState) => state?.cart?.cartItems,
+  );
+  const {addresses, selectedAddressIndex} = useSelector(
+    (state: RootState) => state?.addresses,
+  );
   const user = useSelector((state: RootState) => state?.user?.user);
-  const selectedAddress:  Address | undefined  = addresses[selectedAddressIndex] || {};
-  
+  const selectedAddress: Address | undefined =
+    addresses[selectedAddressIndex] || {};
+
   const calculateTotal = (): string => {
-    return cartItems?.reduce((total: number, item: CartItem) => total + item.quantity * item.price, 0)?.toFixed(2);
+    return cartItems
+      ?.reduce(
+        (total: number, item: CartItem) => total + item.quantity * item.price,
+        0,
+      )
+      ?.toFixed(2);
   };
 
   const handleClearCart = () => {
     dispatch(resetCart());
-    navigation.navigate("Home")
-  }
+    navigation.navigate('Home');
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{"Order Confirmation"}</Text>
+      <Text style={styles.header}>{TEXTS.ORDER_CONFIRMATION}</Text>
 
       <View style={styles.addressContainer}>
-        <Text style={styles.addressHeader}>{"Delivery Address"}</Text>
+        <Text style={styles.addressHeader}>{TEXTS.DELIVERY_ADDRESS}</Text>
         <Text style={styles.addressText}>{selectedAddress?.addressLine}</Text>
         <Text style={styles.addressText}>
-          {selectedAddress?.city}, {selectedAddress?.state} - {selectedAddress?.pincode}
+          {selectedAddress?.city}, {selectedAddress?.state} -{' '}
+          {selectedAddress?.pincode}
         </Text>
       </View>
 
-      <Text style={styles.orderItemsHeader}>{"Place Order Items"}</Text>
+      <Text style={styles.orderItemsHeader}>{TEXTS.PLACE_ORDER_ITEMS}</Text>
 
       <FlatList
         data={cartItems}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.item}>
-            <Image source={{ uri: item.thumbnail }} style={styles.itemImage} />
+            <Image source={{uri: item.thumbnail}} style={styles.itemImage} />
             <View style={styles.itemDetails}>
               <Text style={styles.itemText}>{item?.title}</Text>
-              <Text style={styles.qty}>{"Qty:"} {item?.quantity}</Text>
+              <Text style={styles.qty}>
+                {'Qty:'} {item?.quantity}
+              </Text>
               <Text style={styles.qty}> {item?.total}</Text>
             </View>
           </View>
@@ -69,7 +90,9 @@ const ConfirmationScreen: React.FC<ConfirmationProps> = ({navigation}) => {
       />
 
       <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>{"Total: "} {calculateTotal()}</Text>
+        <Text style={styles.totalText}>
+          {TEXTS.TOTAL} {calculateTotal()}
+        </Text>
       </View>
 
       <Text style={styles.thankYouText}>
@@ -77,7 +100,7 @@ const ConfirmationScreen: React.FC<ConfirmationProps> = ({navigation}) => {
       </Text>
 
       <TouchableOpacity style={styles.button} onPress={handleClearCart}>
-        <Text style={styles.buttonText}>{"Back to Home"}</Text>
+        <Text style={styles.buttonText}>{TEXTS.BACK_TO_HOME}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -104,7 +127,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
@@ -156,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,

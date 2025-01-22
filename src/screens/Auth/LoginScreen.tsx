@@ -12,7 +12,7 @@ import {loggedInUser} from '../../store/asyncThunks';
 import Toast from 'react-native-toast-message';
 import ToastMessages from '../../constants/toastMessages';
 import {AppDispatch} from '../../store';
-import Texts from '../../constants/textConstant';
+import {Texts} from '../../constants/textConstant';
 
 type FormData = {
   username: string;

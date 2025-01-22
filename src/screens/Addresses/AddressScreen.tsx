@@ -16,6 +16,7 @@ import Toast from 'react-native-toast-message';
 import {RootState} from '../../store';
 import {NavigationProp} from '@react-navigation/native';
 import ToastMessages from '../../constants/toastMessages';
+import {TextConstants} from '../../constants/textConstant';
 
 type AddressesProps = {
   navigation: NavigationProp<any>;
@@ -70,7 +71,7 @@ const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Address Line"
+          placeholder={TextConstants.FORM.ADDRESS_LINE}
           value={address.addressLine}
           placeholderTextColor="black"
           onChangeText={text =>
@@ -79,21 +80,21 @@ const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
         />
         <TextInput
           style={styles.input}
-          placeholder="City"
+          placeholder={TextConstants.FORM.CITY}
           value={address.city}
           placeholderTextColor="black"
           onChangeText={text => setAddress(prev => ({...prev, city: text}))}
         />
         <TextInput
           style={styles.input}
-          placeholder="State"
+          placeholder={TextConstants.FORM.STATE}
           placeholderTextColor="black"
           value={address.state}
           onChangeText={text => setAddress(prev => ({...prev, state: text}))}
         />
         <TextInput
           style={styles.input}
-          placeholder="Pincode"
+          placeholder={TextConstants.FORM.PINCODE}
           placeholderTextColor="black"
           keyboardType="numeric"
           value={address.pincode}
@@ -107,7 +108,7 @@ const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
           ]}
           disabled={!isFormValid()}>
           <Text style={{color: isFormValid() ? '#fff' : '#666'}}>
-            {'Add Address'}
+            {TextConstants.ADDRESS.ADD_ADDRESS}
           </Text>
         </TouchableOpacity>
       </View>
@@ -140,7 +141,9 @@ const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
           </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.noAddressText}>{'No addresses added yet.'}</Text>
+          <Text style={styles.noAddressText}>
+            {TextConstants.ADDRESS.NO_ADDRESSES}
+          </Text>
         }
       />
       <TouchableOpacity
@@ -149,7 +152,9 @@ const AddressesScreen: React.FC<AddressesProps> = ({navigation}) => {
           navigation.navigate('OrderConformation');
         }}
         style={styles.submitButton}>
-        <Text style={styles.submitText}>{'Place Order'}</Text>
+        <Text style={styles.submitText}>
+          {TextConstants.ADDRESS.PLACE_ORDER}
+        </Text>
       </TouchableOpacity>
     </View>
   );
