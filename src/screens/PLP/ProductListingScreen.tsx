@@ -1,51 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, StyleSheet, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, searchProducts } from '../../store/asyncThunks';
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProducts, searchProducts} from '../../store/asyncThunks';
+import {AppDispatch, RootState} from '../../store';
 
-const ProductListingScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state?.products);
-  const { products } = useSelector((state) => state?.products?.products);
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+}
+
+interface ProductListingScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
+}
+
+const ProductListingScreen: React.FC<ProductListingScreenProps> = ({
+  navigation,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const {loading, error} = useSelector((state: RootState) => state?.products);
+  const {products} = useSelector(state => state?.products?.products);
   const [searchQuery, setSearchQuery] = useState('');
   const [query, setquery] = useState('');
 
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setquery(searchQuery);
-      }, 300);
-      return () => clearTimeout(handler);
-    }, [searchQuery]);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setquery(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
-    useEffect(() => {
-      if (query?.length >= 3) {
-        dispatch(searchProducts(query)); 
-      } else if (query.length === 0) {
-        dispatch(fetchProducts()); 
-      }
-    }, [query, dispatch]);
-
-    if (loading) {
-      return <ActivityIndicator size="large" color="#00796b" style={styles.loader} />;
+  useEffect(() => {
+    if (query?.length >= 3) {
+      dispatch(searchProducts({query}));
+    } else if (query.length === 0) {
+      dispatch(fetchProducts());
     }
-  
-    if (error) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{"Error: "}{error}</Text>
-        </View>
-      );
-    }
+  }, [query, dispatch]);
 
+  if (loading) {
+    return (
+      <ActivityIndicator size="large" color="#00796b" style={styles.loader} />
+    );
+  }
 
-  const renderItem = ({ item }) => (
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {'Error: '}
+          {error}
+        </Text>
+      </View>
+    );
+  }
+
+  const renderItem = ({item}: {item: Product}) => (
     <TouchableOpacity
       style={styles.productCard}
-      onPress={() => navigation.navigate('PDP', { product: item })}
-      >
-      <Image source={{ uri: item?.thumbnail }} style={styles.thumbnail} />
+      onPress={() => navigation.navigate('PDP', {product: item})}>
+      <Image source={{uri: item?.thumbnail}} style={styles.thumbnail} />
       <Text style={styles.productTitle}>{item?.title}</Text>
-      <Text style={styles.productPrice}>{"Price: "}{item?.price}</Text>
+      <Text style={styles.productPrice}>
+        {'Price: '}
+        {item?.price}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -54,7 +85,7 @@ const ProductListingScreen = ({navigation}) => {
       <TextInput
         style={styles.searchInput}
         placeholder="Search products"
-         placeholderTextColor="black"
+        placeholderTextColor="black"
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
@@ -62,9 +93,11 @@ const ProductListingScreen = ({navigation}) => {
       <FlatList
         data={products}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()} 
-        numColumns={2} 
-        ListEmptyComponent={<Text style={styles.noResults}>{"No categories found."}</Text>}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+        ListEmptyComponent={
+          <Text style={styles.noResults}>{'No categories found.'}</Text>
+        }
       />
     </View>
   );

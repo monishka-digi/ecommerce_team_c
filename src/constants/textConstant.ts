@@ -9,6 +9,9 @@ const Texts = {
     LOGIN_FAILURE_TITLE: 'Login Failed',
     LOGIN_FAILURE_MESSAGE: 'Login failed. Please try again.',
     ERROR_GENERIC: 'Something went wrong. Please try again.',
+    TITLE: 'DigiSprint',
+    LOGOUT: 'Logout',
+    CART_ICON: '🛒',
   };
   
   export default Texts;

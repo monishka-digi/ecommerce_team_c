@@ -1,19 +1,26 @@
+import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import Texts from '../constants/textConstant';
 
-const Header = ({ navigation }) => {
-  const {cartItems} = useSelector((state) => state?.cart);
+type HeaderProps = {
+  navigation: NavigationProp<any>;
+};
+
+const Header: React.FC<HeaderProps> = ({navigation}) => {
+  const {cartItems} = useSelector((state: RootState) => state?.cart);
 
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>{"DigiSprint"}</Text>
+      <Text style={styles.title}>{Texts.TITLE}</Text>
       <View style={styles.rightTools}>
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.logoutText}>{"Logout"}</Text>
+          <Text style={styles.logoutText}>{Texts.LOGOUT}</Text>
         </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-        <Text style={styles.cartIcon}>🛒{ cartItems?.length >= 1 && cartItems?.length}</Text>
+        <Text style={styles.cartIcon}>{Texts.CART_ICON}{ cartItems?.length >= 1 && cartItems?.length}</Text>
       </TouchableOpacity> 
       </View>
     </View>

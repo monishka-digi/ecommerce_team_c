@@ -7,6 +7,22 @@ type LoginPayload = {
   password: string;
   expiresInMins: number;
 };
+interface SearchQuery {
+  query: string;
+}
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}
+interface SearchResponse {
+  products: Product[];
+  total: number;
+}
+interface SearchProductsError {
+  message: string;
+}
 
 export const loggedInUser = createAsyncThunk(
   'auth/loggedInUser',
@@ -83,16 +99,13 @@ export const addToCartAPI = createAsyncThunk(
 
 export const searchProducts = createAsyncThunk(
   'products/searchProducts',
-  async (query, {rejectWithValue}) => {
+  async (searchQuery: { query: string }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(
-        API_ENDPOINTS.SEARCH_PRODUCTS(query),
-      );
+      const response = await axiosInstance.get(API_ENDPOINTS.SEARCH_PRODUCTS(searchQuery.query));
       return response?.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error?.response?._data || 'Failed to search products',
-      );
+      return rejectWithValue(error?.response?._data || 'Failed to search products');
     }
-  },
+  }
 );
+
