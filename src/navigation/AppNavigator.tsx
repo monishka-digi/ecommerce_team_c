@@ -10,11 +10,12 @@ import {Text, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import AddressesScreen from '../screens/Addresses/AddressScreen';
 import ConformationScreen from '../screens/OrderConformation/ConfirmationScreen';
+import { RootState } from '../store';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const {cartItems} = useSelector(state => state?.cart);
+  const {cartItems} = useSelector((state: RootState) => state?.cart);
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
