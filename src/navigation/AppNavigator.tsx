@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 import AddressesScreen from '../screens/Addresses/AddressScreen';
 import ConformationScreen from '../screens/OrderConformation/ConfirmationScreen';
 import {RootState} from '../store';
+import Lock from '../screens/LockScreen/Lock';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,8 @@ const AppNavigator = () => {
         options={{title: 'Address Details', headerShown: true}}
       />
       <Stack.Screen name="OrderConformation" component={ConformationScreen} />
+      <Stack.Screen name="Lock" component={Lock} />
+
     </Stack.Navigator>
   );
 };
