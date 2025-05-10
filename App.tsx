@@ -1,46 +1,26 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import {Provider} from 'react-redux';
+import Toast from 'react-native-toast-message';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor, store} from './src/store';
+import {NavigationContainer} from '@react-navigation/native';
+import AppNavigator from './src/navigation/AppNavigator';
 
-function App(): React.JSX.Element {
-
-  return (
-    <SafeAreaView >
-       <Text>
-       {"Hello World"}
-     
-      </Text>
-    </SafeAreaView>
-  );
+if (__DEV__) {
+  require("./ReactotronConfig");
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+function App(): React.JSX.Element {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </PersistGate>
+      <Toast />
+    </Provider>
+  );
+}
 
 export default App;

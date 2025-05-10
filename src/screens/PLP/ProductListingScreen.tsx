@@ -1,0 +1,169 @@
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProducts, searchProducts} from '../../store/asyncThunks';
+import {AppDispatch, RootState} from '../../store';
+import {CART_SCREEN_TEXT, TEXTS} from '../../constants/textConstant';
+
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+}
+
+interface ProductListingScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
+}
+
+const ProductListingScreen: React.FC<ProductListingScreenProps> = ({
+  navigation,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const {loading, error} = useSelector((state: RootState) => state?.products);
+  const {products} = useSelector(state => state?.products?.products);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [query, setquery] = useState('');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setquery(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (query?.length >= 3) {
+      dispatch(searchProducts({query}));
+    } else if (query.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [query, dispatch]);
+
+  if (loading) {
+    return (
+      <ActivityIndicator size="large" color="#00796b" style={styles.loader} />
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {'Error: '}
+          {error}
+        </Text>
+      </View>
+    );
+  }
+
+  const renderItem = ({item}: {item: Product}) => (
+    <TouchableOpacity
+      style={styles.productCard}
+      onPress={() => navigation.navigate('PDP', {product: item})}>
+      <Image source={{uri: item?.thumbnail}} style={styles.thumbnail} />
+      <Text style={styles.productTitle}>{item?.title}</Text>
+      <Text style={styles.productPrice}>
+        {CART_SCREEN_TEXT.priceLabel}
+        {item?.price}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder={TEXTS.SEARCH_PLACEHOLDERPRODUCTS}
+        placeholderTextColor="black"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+
+      <FlatList
+        data={products}
+        renderItem={renderItem}
+        keyExtractor={(_, index) => index.toString()}
+        numColumns={2}
+        ListEmptyComponent={
+          <Text style={styles.noResults}>{TEXTS.NO_CATEGORIES_FOUND}</Text>
+        }
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginBottom: 16,
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  productCard: {
+    flex: 1,
+    margin: 8,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#ddd',
+    padding: 12,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  thumbnail: {
+    width: 150,
+    height: 150,
+    marginBottom: 8,
+  },
+  productTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  productPrice: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 8,
+  },
+  loader: {
+    marginTop: 20,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+  },
+  noResults: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+    marginTop: 20,
+  },
+});
+
+export default ProductListingScreen;
